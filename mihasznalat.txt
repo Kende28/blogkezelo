@@ -1,0 +1,11 @@
+Yamakawa Kende 13/D
+
+szöveges file:
+lista -> képes/nem képes, mi nélkül
+
+vites react alkalmazás komponensek: képes
+react-router: képes
+useState: képes
+adatfelvétel form űrlap validálással: képes
+törlés: képes
+kapcsoló: képes
