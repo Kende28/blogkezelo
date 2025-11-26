@@ -26,6 +26,27 @@ app.get("/posts", async (req, res) => {
     }
 })
 
+app.delete("/posts/delete/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [result] = await connection.query(
+      `DELETE FROM blog_bejegyzesek WHERE id = ?`,
+      [id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res
+        .status(404)
+        .json({ message: "A megadott ID-jű post nem található." });
+    }
+
+    res.json({ message: "Powerbank sikeresen törölve." });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Hiba történt a törlés során." });
+  }
+});
+
 app.listen(port, () => {
     console.log(`A szerver működik a ${port} porton.`)
 })
