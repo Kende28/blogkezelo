@@ -5,9 +5,6 @@ export function Main() {
         <div className='container col-sm-12'>
             <h1>Blogkezelő</h1>
             <p>Blogokat ír ki és ad hozzá</p>
-            <NavLink className="btn btn-primary" to="/posts">Blogok megtekintése</NavLink>
-            <NavLink className="btn btn-primary" to="/new">Blogok létrehozása</NavLink>
-            <Outlet></Outlet>
         </div>
     </>
 }

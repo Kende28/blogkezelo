@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 export function Posts() {
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+
+  const navigate = useNavigate();
 
   const fetchPosts = async () => {
     const res = await fetch("http://localhost:3000/posts");
@@ -59,6 +62,26 @@ export function Posts() {
     }
   };
 
+  const handleSetPostVisible = async (postId) => {
+    const res = await fetch(`http://localhost:3000/posts/visible/${postId}`, {
+      method: "PUT",
+    });
+    if (!res.ok) {
+      throw new Error(`Error: ${res.status}`);
+    }
+    fetchPosts();
+  };
+
+  const handleSetPostInvisible = async (postId) => {
+    const res = await fetch(`http://localhost:3000/posts/invisible/${postId}`, {
+      method: "PUT",
+    });
+    if (!res.ok) {
+      throw new Error(`Error: ${res.status}`);
+    }
+    fetchPosts();
+  };
+
   const handleDelete = async (postId: number) => {
     const res = await fetch(`http://localhost:3000/posts/delete/${postId}`, {
       method: "DELETE",
@@ -67,7 +90,7 @@ export function Posts() {
       throw new Error(`Error: ${res.status}`);
     }
     setPosts(posts.filter((post) => post.id !== postId));
-    fetchPosts()
+    fetchPosts();
   };
 
   useEffect(() => {
@@ -148,7 +171,10 @@ export function Posts() {
                 <td>{post.createdAt}</td>
                 <td>{post.visible ? "Látható" : "Rejtett"}</td>
                 <td>
-                  <span>🔍</span>
+                  <span style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      navigate(`/post/${post.id}`);
+                    }}>🔍</span>
                 </td>
                 <td>
                   <span
@@ -161,10 +187,16 @@ export function Posts() {
                   </span>
                 </td>
                 <td>
-                  <span style={{ cursor: "pointer" }}
+                  <span
+                    style={{ cursor: "pointer" }}
                     onClick={() => {
-                      
-                    }}>👁️</span>
+                      post.visible
+                        ? handleSetPostInvisible(post.id)
+                        : handleSetPostVisible(post.id);
+                    }}
+                  >
+                    👁️
+                  </span>
                 </td>
               </tr>
             ))}
